@@ -1,10 +1,38 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
+	"godev/utils"
 	"net/http"
 )
+
+func main() {
+	const PORT = ":5173"
+	r := mux.NewRouter()
+	connection := db()
+	serve_static()
+	author_routes(r)
+	utils.Book_routes(r, connection)
+	er := http.ListenAndServe(PORT, r)
+	if er != nil {
+		panic(er)
+	} else {
+		fmt.Printf("Serving static files\n")
+	}
+}
+
+func db() *sql.DB {
+	db, _ := sql.Open("mysql", "root:admin@(127.0.0.1:3306)/godev?parseTime=true")
+	db_err := db.Ping()
+	if db_err != nil {
+		panic(db_err.Error())
+	}
+	fmt.Printf("Connected to database\n")
+	return db
+}
 
 func serve_static() {
 	fmt.Printf("Serving static files\n")
@@ -51,19 +79,4 @@ func author_routes(r *mux.Router) {
 		name := vars["name"]
 		fmt.Fprintf(w, "You've requested the author: %s\n", name)
 	}).Methods("POST")
-}
-
-func main() {
-	const PORT = ":5173"
-	r := mux.NewRouter()
-	serve_static()
-	book_routes(r)
-	author_routes(r)
-
-	err := http.ListenAndServe(PORT, r)
-	if err != nil {
-		panic(err)
-	} else {
-		fmt.Printf("Serving static files\n")
-	}
 }
