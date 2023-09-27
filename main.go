@@ -9,12 +9,14 @@ import (
 	"net/http"
 )
 
+
 func main() {
 	const PORT = ":5173"
 	r := mux.NewRouter()
 	connection := db()
 	serve_static()
 	author_routes(r)
+	utils.Message_routes(r, connection)
 	utils.Book_routes(r, connection)
 	er := http.ListenAndServe(PORT, r)
 	if er != nil {

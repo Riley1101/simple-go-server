@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    {{if.Success}}
+    <h1>Thanks for your message!</h1>
+    {{else}}
+    <h1>Contact</h1>
+    <form method="POST">
+      <label>Email:</label><br />
+      <input type="text" name="email" /><br />
+      <label>Message:</label><br />
+      <textarea name="message"></textarea><br />
+      <input type="submit" />
+    </form>
+    {{end}}
+  </body>
+</html>
