@@ -26,7 +26,6 @@ func createBookTable(db *sql.DB) {
 	}
 }
 
-
 func (book Book) createBook(db *sql.DB) string {
 	query := "INSERT INTO books (title, author,created_at,updated_at) VALUES (?, ?, ?, ?)"
 	book.created_at = time.Now()
@@ -39,8 +38,34 @@ func (book Book) createBook(db *sql.DB) string {
 	return "Book created successfully"
 }
 
+func getBooks(db *sql.DB) []Book {
+
+	query := "SELECT * from books;"
+	result, err := db.Query(query)
+	if err != nil {
+		panic(err.Error())
+	}
+	defer result.Close()
+	var books []Book
+	for result.Next() {
+		var book Book
+		err := result.Scan(&book.Id, &book.title, &book.author, &book.created_at, &book.updated_at)
+		if err != nil {
+			panic(err.Error())
+		}
+		books = append(books, book)
+	}
+
+	return books
+}
+
 func Book_routes(r *mux.Router, connection *sql.DB) {
 	book_route := r.PathPrefix("/books").Subrouter()
+
+	book_route.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		books := getBooks(connection)
+		fmt.Fprintf(w, "Books: %v", books)
+	}).Methods("GET")
 
 	book_route.HandleFunc("/create_table", func(w http.ResponseWriter, r *http.Request) {
 		createBookTable(connection)
