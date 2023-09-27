@@ -11,10 +11,10 @@ import (
 
 type Book struct {
 	Id         int
-	title      string
-	author     string
-	created_at time.Time
-	updated_at time.Time
+	Title      string
+	Author     string
+	Created_At time.Time
+	Updated_At time.Time
 }
 
 func createBookTable(db *sql.DB) {
@@ -28,9 +28,9 @@ func createBookTable(db *sql.DB) {
 
 func (book Book) createBook(db *sql.DB) string {
 	query := "INSERT INTO books (title, author,created_at,updated_at) VALUES (?, ?, ?, ?)"
-	book.created_at = time.Now()
-	book.updated_at = time.Now()
-	stmt, err := db.Exec(query, book.title, book.author, book.created_at, book.updated_at)
+	book.Created_At = time.Now()
+	book.Updated_At = time.Now()
+	stmt, err := db.Exec(query, book.Title, book.Author, book.Created_At, book.Updated_At)
 	fmt.Println(stmt)
 	if err != nil {
 		panic(err.Error())
@@ -49,7 +49,7 @@ func getBooks(db *sql.DB) []Book {
 	var books []Book
 	for result.Next() {
 		var book Book
-		err := result.Scan(&book.Id, &book.title, &book.author, &book.created_at, &book.updated_at)
+		err := result.Scan(&book.Id, &book.Title, &book.Author, &book.Created_At, &book.Updated_At)
 		if err != nil {
 			panic(err.Error())
 		}
@@ -75,7 +75,7 @@ func Book_routes(r *mux.Router, connection *sql.DB) {
 	book_route.HandleFunc("/create", func(w http.ResponseWriter, r *http.Request) {
 		title := r.FormValue("title")
 		author := r.FormValue("author")
-		book := Book{title: title, author: author}
+		book := Book{Title: title, Author: author}
 		fmt.Fprintf(w, book.createBook(connection))
 	}).Methods("POST")
 }

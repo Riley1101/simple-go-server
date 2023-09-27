@@ -9,7 +9,6 @@ import (
 	"net/http"
 )
 
-
 func main() {
 	const PORT = ":5173"
 	r := mux.NewRouter()
@@ -18,6 +17,7 @@ func main() {
 	author_routes(r)
 	utils.Message_routes(r, connection)
 	utils.Book_routes(r, connection)
+	utils.Websocket_Routes(r, connection)
 	er := http.ListenAndServe(PORT, r)
 	if er != nil {
 		panic(er)
