@@ -2,6 +2,7 @@ package utils
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
@@ -11,18 +12,18 @@ import (
 )
 
 type Message struct {
-	Id         int
-	title      string
-	body       string
-	created_at time.Time
-	updated_at time.Time
+	Id         int    `json:"id"`
+	Title      string `json:"title"`
+	Body       string `json:"body"`
+	Created_At time.Time `json:"created_at"`
+	Updated_At time.Time `json:"updated_at"`
 }
 
 func (message Message) createMessage(db *sql.DB) string {
 	query := "INSERT INTO messages (title, body, created_at, updated_at) VALUES (?, ? , ? , ?)"
-	message.created_at = time.Now()
-	message.updated_at = time.Now()
-	stmt, err := db.Exec(query, message.title, message.body, message.created_at, message.updated_at)
+	message.Created_At = time.Now()
+	message.Updated_At = time.Now()
+	stmt, err := db.Exec(query, message.Title, message.Body, message.Created_At, message.Updated_At)
 	fmt.Println(stmt)
 	if err != nil {
 		panic(err.Error())
@@ -51,8 +52,8 @@ func Message_routes(r *mux.Router, connection *sql.DB) {
 
 	message_route.HandleFunc("/create", Logging(func(w http.ResponseWriter, r *http.Request) {
 		message := Message{
-			title: r.FormValue("title"),
-			body:  r.FormValue("body"),
+			Title: r.FormValue("title"),
+			Body:  r.FormValue("body"),
 		}
 		fmt.Println(message.createMessage(connection))
 		fmt.Fprintf(w, "added a new message")
@@ -60,6 +61,27 @@ func Message_routes(r *mux.Router, connection *sql.DB) {
 
 	message_route.HandleFunc("/form", Logging(func(w http.ResponseWriter, r *http.Request) {
 		formTemplate(w, r, connection)
+	}))
+
+	message_route.HandleFunc("/json", Logging(func(w http.ResponseWriter, r *http.Request) {
+		messages := []Message{}
+		query := "SELECT * FROM messages"
+		rows, err := connection.Query(query)
+		if err != nil {
+			panic(err.Error())
+		}
+		for rows.Next() {
+			var message Message
+			rows.Scan(&message.Id, &message.Title, &message.Body, &message.Created_At, &message.Updated_At)
+			messages = append(messages, message)
+		}
+		defer rows.Close()
+        for _, message := range messages {
+            fmt.Println(message.Title,message.Body)
+        }
+		// send messages as json
+        json.NewEncoder(w).Encode(messages)
+        
 	}))
 }
 
@@ -71,10 +93,11 @@ func formTemplate(w http.ResponseWriter, r *http.Request, connection *sql.DB) {
 	}
 
 	message := Message{
-		title: r.FormValue("title"),
-		body:  r.FormValue("body"),
+		Title: r.FormValue("title"),
+		Body:  r.FormValue("body"),
 	}
-	_ = message
+	fmt.Println(message)
+	message.createMessage(connection)
 
 	tmpl.Execute(w, struct{ Success bool }{true})
 }
