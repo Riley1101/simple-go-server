@@ -1,11 +1,11 @@
 repo_name: Riley1101/simple-go-server
-report_id: 33cb3fa7f35542cb1a46a8f3f35e62fe
+report_id: 92ecffd5e61bb02986e6dc0f6e8ad0c9
 repo_type: Public
-timestamp: '2023-11-11T17:16:07+00:00'
+timestamp: '2023-12-14T10:25:31+00:00'
 requested_by: Riley1101
 provider: github
 branch: main
-detected_tools_count: 5
+detected_tools_count: 9
 tools:
 - name: Golang
   description: An open source programming language that makes it easy to build simple,
@@ -29,6 +29,19 @@ tools:
   detection_source: docker-compose.yaml
   last_updated_by: Riley1101
   last_updated_on: 2023-09-26 19:58:41.000000000 Z
+- name: DB
+  description: 'Version control for databases: save, restore, and archive snapshots
+    of your database from the command line'
+  website_url: https://github.com/infostreams/db
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Data Stores
+  sub_category: Database Tools
+  image_url: https://img.stackshare.io/service/11593/no-img.png
+  detection_source: docker-compose.yaml
+  last_updated_by: Riley1101
+  last_updated_on: 2023-09-26 19:58:41.000000000 Z
 - name: MySQL
   description: The world's most popular open source database
   website_url: http://www.mysql.com
@@ -37,7 +50,7 @@ tools:
   category: Data Stores
   sub_category: Databases
   image_url: https://img.stackshare.io/service/1025/logo-mysql-170x170.png
-  detection_source: go.mod
+  detection_source: docker-compose.yaml
   last_updated_by: Riley1101
   last_updated_on: 2023-09-26 19:58:41.000000000 Z
 - name: Git
@@ -58,3 +71,41 @@ tools:
   detection_source: docker-compose.yaml
   last_updated_by: Riley1101
   last_updated_on: 2023-09-26 19:58:41.000000000 Z
+- name: HTML
+  description: Hypertext Markup Language for creating web pages.
+  website_url: http://
+  open_source: false
+  hosted_saas: false
+  image_url: https://img.stackshare.io/service/2270/no-img-open-source.png
+  detection_source: templates/chat.html
+  last_updated_by: Riley1101
+  last_updated_on: 2023-09-27 18:16:45.000000000 Z
+- name: mux
+  description: "A powerful HTTP router and URL matcher for building Go web servers
+    with \U0001F98D"
+  package_url: https://pkg.go.dev/github.com/gorilla/mux
+  version: 1.8.0
+  license: BSD-3-Clause
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: Go Modules Packages
+  image_url: https://img.stackshare.io/package/go-packages/image.png
+  detection_source_url: https://github.com/Riley1101/simple-go-server/blob/main/go.sum
+  detection_source: go.mod
+  last_updated_by: Riley1101
+  last_updated_on: 2023-09-26 19:09:38.000000000 Z
+- name: websocket
+  description: A fast
+  package_url: https://pkg.go.dev/github.com/gorilla/websocket
+  version: 1.5.0
+  license: BSD-3-Clause
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: Go Modules Packages
+  image_url: https://img.stackshare.io/package/go-packages/image.png
+  detection_source_url: https://github.com/Riley1101/simple-go-server/blob/main/go.sum
+  detection_source: go.mod
+  last_updated_by: Riley1101
+  last_updated_on: 2023-09-27 18:16:45.000000000 Z
